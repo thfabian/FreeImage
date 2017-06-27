@@ -1,6 +1,6 @@
 # FreeImage 3.15.3
 
-This repository adds CMake and CI support to ![FreeImage](http://freeimage.sourceforge.net/).
+This repository adds CMake and CI support to [FreeImage](http://freeimage.sourceforge.net/).
 
 ## Build
 
