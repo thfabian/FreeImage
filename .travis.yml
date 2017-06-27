@@ -1,0 +1,60 @@
+sudo: required
+dist: trusty
+language: c
+
+matrix:
+ include:
+  # OSX / Clang
+  - os: osx
+    osx_image: xcode8
+    env: LIB=SHARED
+
+  # OSX / Clang
+  - os: osx
+    osx_image: xcode8
+    env: LIB=STATIC
+  
+  # Linux / GCC
+  - os: linux
+    compiler: gcc
+    env: 
+      - C_COMPILER=gcc-4.9
+      - LIB=STATIC
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: 
+          - gcc-4.9
+          - libreadline-dev
+  
+  - os: linux
+    compiler: gcc
+    env: 
+      - C_COMPILER=gcc-4.9
+      - LIB=SHARED
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: 
+          - gcc-4.9
+          - libreadline-dev
+      
+  
+before_script:
+  - export BUILD_DIR=$(pwd)/build
+  - export INSTALL_DIR=$BUILD_DIR/install
+
+  - mkdir $BUILD_DIR
+  - pushd $(pwd)
+  - cd $BUILD_DIR
+
+  - if [[ "${C_COMPILER}" != "" ]]; then export CMAKE_C_COMPILER=${C_COMPILER}; fi
+  - if [[ "${LIB}" == "STATIC" ]]; then export BUILD_SHARED_LIBS=OFF; fi
+
+  - cmake ../ -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
+  - cmake --build . --target install
+  - popd
+
+script:
+  - bash test/check-install.sh $INSTALL_DIR
+
