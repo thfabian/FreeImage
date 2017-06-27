@@ -1,6 +1,6 @@
 sudo: required
 dist: trusty
-language: c
+language: c++
 
 matrix:
  include:
@@ -29,8 +29,14 @@ before_script:
   - pushd $(pwd)
   - cd $BUILD_DIR
 
+  - echo ${C_COMPILER}
+  - echo ${CXX_COMPILER}
+
   - if [[ "${C_COMPILER}" != "" ]]; then export CMAKE_C_COMPILER=${C_COMPILER}; fi
   - if [[ "${CXX_COMPILER}" != "" ]]; then export CMAKE_CXX_COMPILER=${CXX_COMPILER}; fi
+
+  - echo ${CMAKE_C_COMPILER}
+  - echo ${CMAKE_CXX_COMPILER}
 
   - cmake ../ -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DFREEIMAGE_TESTING=ON
   - cmake --build . --target install
