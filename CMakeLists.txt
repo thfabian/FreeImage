@@ -31,6 +31,26 @@ cmake_minimum_required(VERSION 3.0)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 option(FREEIMAGE_TESTING "Build tests" ON)
+option(BUILD_SHARED_LIBS "Allow linking against shared libraries (adds -fPIC)" ON)
+
+# Windows
+if(WIN32) 
+
+# MacOSX
+elseif(APPLE)
+  if(BUILD_SHARED_LIBS)
+    list(APPEND CMAKE_CXX_FLAGS -fPIC)
+    list(APPEND CMAKE_C_FLAGS -fPIC)
+  endif()
+
+# Linux and other *nixs
+else()
+  if(BUILD_SHARED_LIBS)
+    list(APPEND CMAKE_CXX_FLAGS -fPIC)
+    list(APPEND CMAKE_C_FLAGS -fPIC)
+  endif()
+endif()
+
 
 set(FREEIMAGE_VERSION_MAJOR 3)
 set(FREEIMAGE_VERSION_MINOR 15)
